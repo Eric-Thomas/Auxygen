@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AppConstants } from '../app-constants';
 
 @Injectable({
   providedIn: 'root'
@@ -7,17 +8,14 @@ import { HttpClient } from '@angular/common/http';
 export class SpotifyLoginService {
 
   private clientid = '47cbb524e65c4535ad2c93e1b6ae2e38';
-  private redirectUri = 'http://192.168.1.24:4200/leader';
+
+  private redirectUri = AppConstants.localhost + '/callback';
 
   private scope = 'user-modify-playback-state';
 
   private loginUrl: string = 'https://accounts.spotify.com/authorize';
 
-  private hashParams: any;
-
-  private accessToken: any;
-
-  //TODO add state = generateRandomString(16);
+  // TODO: add state = generateRandomString(16);
 
   constructor(private httpClient: HttpClient) {
     // Generate spotify authorization endpoint

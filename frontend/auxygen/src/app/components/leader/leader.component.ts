@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { stringify } from '@angular/compiler/src/util';
+import { AccessTokenService } from 'src/app/services/access-token.service';
 
 @Component({
   selector: 'app-leader',
@@ -8,24 +9,13 @@ import { stringify } from '@angular/compiler/src/util';
 })
 export class LeaderComponent implements OnInit {
 
-  private hashParams: any;
   private accessToken = '';
-  constructor() { }
+
+  constructor(private accessTokenService: AccessTokenService) { }
 
   ngOnInit() {
-    this.hashParams = this.getHashParams();
-    this.accessToken = this.hashParams.access_token;
-    console.log(this.accessToken);
+    this.accessToken = this.accessTokenService.accessToken;
   }
 
-  getHashParams() {
-    var hashParams = {};
-    var e, r = /([^&;=]+)=?([^&;]*)/g,
-      q = window.location.hash.substring(1);
-    while (e = r.exec(q)) {
-      hashParams[e[1]] = decodeURIComponent(e[2]);
-    }
-    return hashParams;
-  }
 
 }
