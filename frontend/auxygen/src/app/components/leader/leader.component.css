@@ -1,0 +1,14 @@
+.form-container {
+    display: flex; 
+    flex-direction: row;
+}
+.form-group {
+     display: flex; 
+     flex-direction: row;
+}
+input {
+    float: left;
+}
+button {
+    float: right;
+}

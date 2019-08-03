@@ -10,11 +10,16 @@ import { AccessTokenService } from 'src/app/services/access-token.service';
 export class LeaderComponent implements OnInit {
 
   private accessToken = '';
+  private userName = '';
 
   constructor(private accessTokenService: AccessTokenService) { }
 
   ngOnInit() {
     this.accessToken = this.accessTokenService.accessToken;
+  }
+
+  createLeader() {
+
   }
 
 
