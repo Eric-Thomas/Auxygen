@@ -1,1 +1,9 @@
-<p>callback works!</p>
+<div *ngIf="authorizationError">
+    <div class="header">
+        <h1>Error during authorization</h1>
+    </div>
+
+    <div class="button-container">
+        <button type="button" class="btn btn-secondary" (click)="retryAuthorization()">Retry Authorization</button>
+    </div>
+</div>

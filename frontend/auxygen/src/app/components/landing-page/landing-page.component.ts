@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SpotifyLoginService } from 'src/app/services/spotify-login.service';
+import { SpotifyAuthorizationService } from 'src/app/services/spotify-authorization.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -8,13 +8,13 @@ import { SpotifyLoginService } from 'src/app/services/spotify-login.service';
 })
 export class LandingPageComponent implements OnInit {
 
-  constructor(private spotifyLoginService: SpotifyLoginService) { }
+  constructor(private spotifyAuthorizationService: SpotifyAuthorizationService) { }
 
   ngOnInit() {
   }
 
   login() {
-    this.spotifyLoginService.login();
+    this.spotifyAuthorizationService.authorize();
   }
 
 }
