@@ -2,8 +2,8 @@ import mongoengine
 
 
 class Song(mongoengine.EmbeddedDocument):
-    uri = StringField(required=True)
-    artist = StringField(required=True)
-    album = StringField()
+    uri = mongoengine.StringField(required=True)
+    artist = mongoengine.StringField(required=True)
+    album = mongoengine.StringField()
 
     meta = {'collection': 'songs'}
