@@ -6,6 +6,7 @@ from flask_cors import CORS
 from models import leader
 
 app = Flask(__name__)
+CORS(app)
 
 connect('auxygen', host='localhost', port=27017)
 
@@ -16,10 +17,9 @@ def add_leader():
         name=request.json['name'], access_token=request.json['access_token'])
     new_leader.save()
     result_leader = leader.Leader.objects(id=new_leader.id)
-    app.logger.info(leader.Leader.objects.first()["name"])
     app.logger.info(new_leader.id)
     app.logger.info(result_leader[0].id)
-    return jsonify({"name": result_leader[0].name, "access token": result_leader[0].access_token})
+    return jsonify({"name": result_leader[0].name, "access_token": result_leader[0].access_token})
 
 
 if __name__ == '__main__':
