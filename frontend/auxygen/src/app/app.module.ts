@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { LeaderComponent } from './components/leader/leader.component';
 import { CallbackComponent } from './components/callback/callback.component';
+import { QueueComponent } from './components/queue/queue.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { CallbackComponent } from './components/callback/callback.component';
     LandingPageComponent,
     LeaderComponent,
     CallbackComponent,
+    QueueComponent,
   ],
   imports: [
     BrowserModule,
