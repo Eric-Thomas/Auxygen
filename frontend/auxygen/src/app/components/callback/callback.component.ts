@@ -18,9 +18,8 @@ export class CallbackComponent implements OnInit {
     var hashParams = this.getHashParams();
     if (hashParams.access_token) {
       this.accessTokenService.accessToken = hashParams.access_token;
-       this.router.navigate(['/leader']); 
+      this.router.navigate(['/leader']);
     } else {
-      // TODO: Make Error logging in page and allow user to authorize again
       this.authorizationError = true;
       console.log("Error during authorization");
     }
