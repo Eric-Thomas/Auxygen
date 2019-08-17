@@ -9,6 +9,7 @@ import { LandingPageComponent } from './components/landing-page/landing-page.com
 import { LeaderComponent } from './components/leader/leader.component';
 import { CallbackComponent } from './components/callback/callback.component';
 import { QueueComponent } from './components/queue/queue.component';
+import { LeaderFormComponent } from './components/leader-form/leader-form.component';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { QueueComponent } from './components/queue/queue.component';
     LeaderComponent,
     CallbackComponent,
     QueueComponent,
+    LeaderFormComponent,
   ],
   imports: [
     BrowserModule,

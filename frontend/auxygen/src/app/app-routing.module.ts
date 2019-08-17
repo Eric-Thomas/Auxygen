@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'callback', component: CallbackComponent },
   { path: 'leader', component: LeaderComponent },
-  { path: 'leader/:username', component: QueueComponent },
+  { path: 'leader/:username', component: LeaderComponent },
 ];
 
 @NgModule({
