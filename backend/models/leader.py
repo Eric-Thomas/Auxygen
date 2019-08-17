@@ -7,7 +7,7 @@ class Leader(mongoengine.Document):
 
     name = mongoengine.StringField(required=True)
     access_token = mongoengine.StringField(required=True)
-    party_number = mongoengine.IntField(unique=True)
+    party_room = mongoengine.IntField(unique=True)
 
     queue = mongoengine.ListField(mongoengine.EmbeddedDocumentField(song.Song))
 

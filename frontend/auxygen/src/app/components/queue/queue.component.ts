@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LeaderService } from 'src/app/services/leader.service';
 
 @Component({
   selector: 'app-queue',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QueueComponent implements OnInit {
 
-  constructor() { }
+  constructor(private leaderService: LeaderService) { }
 
   ngOnInit() {
+    console.log("id: " + this.leaderService.id);
+    console.log("party room: " + this.leaderService.partyRoom);
   }
 
 }

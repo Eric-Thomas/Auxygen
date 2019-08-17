@@ -33,8 +33,6 @@ export class LeaderComponent implements OnInit {
   createLeader() {
     this.apiService.createLeader(this.userName, this.accessToken);
     var url = '/leader/' + this.userName;
-    console.log("id: " + this.leaderService.id);
-    console.log("party room: " + this.leaderService.partyRoom);
     this.router.navigate([url])
   }
 
