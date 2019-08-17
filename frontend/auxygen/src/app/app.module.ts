@@ -10,6 +10,7 @@ import { LeaderComponent } from './components/leader/leader.component';
 import { CallbackComponent } from './components/callback/callback.component';
 import { QueueComponent } from './components/queue/queue.component';
 import { LeaderFormComponent } from './components/leader-form/leader-form.component';
+import { LeaderService } from './services/leader.service';
 
 
 @NgModule({
@@ -27,7 +28,7 @@ import { LeaderFormComponent } from './components/leader-form/leader-form.compon
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [LeaderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -3,6 +3,7 @@ import { AccessTokenService } from 'src/app/services/access-token.service';
 import { ApiService } from 'src/app/services/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LeaderFormComponent } from '../leader-form/leader-form.component'
+import { LeaderService } from 'src/app/services/leader.service';
 
 @Component({
   selector: 'app-leader',
@@ -14,7 +15,11 @@ export class LeaderComponent implements OnInit {
   private accessToken = '';
   private userName = '';
 
-  constructor(private accessTokenService: AccessTokenService, private apiService: ApiService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private accessTokenService: AccessTokenService,
+    private apiService: ApiService,
+    private router: Router,
+    private leaderService: LeaderService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.accessToken = this.accessTokenService.accessToken;
@@ -28,6 +33,8 @@ export class LeaderComponent implements OnInit {
   createLeader() {
     this.apiService.createLeader(this.userName, this.accessToken);
     var url = '/leader/' + this.userName;
+    console.log("id: " + this.leaderService.id);
+    console.log("party room: " + this.leaderService.partyRoom);
     this.router.navigate([url])
   }
 

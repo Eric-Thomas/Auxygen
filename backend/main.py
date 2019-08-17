@@ -4,6 +4,7 @@ from flask import jsonify
 from flask import request
 from flask_cors import CORS
 from models import leader
+from jsonEncoder import JSONEncoder
 
 app = Flask(__name__)
 CORS(app)
@@ -26,9 +27,7 @@ def add_leader():
             break
         except:
             party_number += 1
-
-    result_leader = leader.Leader.objects(id=new_leader.id)
-    return jsonify({"name": result_leader[0].name, "access_token": result_leader[0].access_token})
+    return jsonify({"id": JSONEncoder().encode(new_leader.id), "party_number": new_leader.party_number})
 
 
 if __name__ == '__main__':
