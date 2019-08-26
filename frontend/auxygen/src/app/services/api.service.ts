@@ -17,7 +17,6 @@ export class ApiService {
     postURL += '/leader';
     var body = { "name": name, "access_token": accessToken };
     this.httpClient.post(postURL, body).subscribe(val => {
-      console.log("api service: " + val["id"] + "\n" + val["party_room"])
       this.leaderService.id = val["id"]
       this.leaderService.partyRoom = val["party_room"]
       console.log("Post was successfull")
