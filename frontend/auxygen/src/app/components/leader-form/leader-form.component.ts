@@ -20,9 +20,12 @@ export class LeaderFormComponent implements OnInit {
   }
 
   createLeader() {
-    this.apiService.createLeader(this.userName, this.accessToken);
-    var url = '/leader/' + this.userName;
-    this.router.navigate([url])
+    this.apiService.createLeader(this.userName, this.accessToken, this.navigateToLeaderPage, this.router);
+  }
+
+  navigateToLeaderPage(userName: string, router: Router) {
+    var url = '/leader/' + userName
+    router.navigate([url])
   }
 
 

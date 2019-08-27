@@ -16,9 +16,7 @@ export class LeaderComponent implements OnInit {
   private userName = '';
 
   constructor(private accessTokenService: AccessTokenService,
-    private apiService: ApiService,
     private router: Router,
-    private leaderService: LeaderService,
     private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -28,12 +26,6 @@ export class LeaderComponent implements OnInit {
       this.router.navigate([''])
     }
     this.userName = this.route.snapshot.paramMap.get('username')
-  }
-
-  createLeader() {
-    this.apiService.createLeader(this.userName, this.accessToken);
-    var url = '/leader/' + this.userName;
-    this.router.navigate([url])
   }
 
 
