@@ -12,7 +12,7 @@ export class SpotifyAuthorizationService {
   private redirectUri = AppConstants.localhost + '/callback';
 
   // private scope = 'user-modify-playback-state';
-  private scope = 'user-read-email, user-read-private, streaming';
+  private scope = 'streaming, playlist-read-collaborative, playlist-read-private';
 
   private authorizationUrl: string = 'https://accounts.spotify.com/authorize';
 

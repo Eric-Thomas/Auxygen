@@ -24,7 +24,8 @@ export class LeaderFormComponent implements OnInit {
   }
 
   navigateToLeaderPage(userName: string, router: Router) {
-    var url = '/leader/' + userName
+    console.log("username in navigate: " + userName)
+    let url = '/leader/' + userName
     router.navigate([url])
   }
 

@@ -14,18 +14,24 @@ export class LeaderComponent implements OnInit {
 
   private accessToken = '';
   private userName = '';
+  private playlists = [];
+  private fallbackPlaylist = '';
 
   constructor(private accessTokenService: AccessTokenService,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private apiService: ApiService) { }
 
   ngOnInit() {
     this.accessToken = this.accessTokenService.accessToken;
-    // Get access token if they force to /leader
+    // return to home page if they do not have an access token
     if (!this.accessToken) {
       this.router.navigate([''])
     }
-    this.userName = this.route.snapshot.paramMap.get('username')
+    this.userName = this.route.snapshot.paramMap.get('username');
+    if (this.userName) {
+      this.apiService.getPlaylists();
+    }
   }
 
 

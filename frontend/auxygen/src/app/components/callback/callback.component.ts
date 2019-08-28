@@ -15,7 +15,7 @@ export class CallbackComponent implements OnInit {
   constructor(private accessTokenService: AccessTokenService, private router: Router, private spotifyAuthorizationService: SpotifyAuthorizationService) { }
 
   ngOnInit() {
-    var hashParams = this.getHashParams();
+    let hashParams = this.getHashParams();
     if (hashParams.access_token) {
       this.accessTokenService.accessToken = hashParams.access_token;
       this.router.navigate(['/leader']);
@@ -26,8 +26,8 @@ export class CallbackComponent implements OnInit {
   }
 
   getHashParams(): any {
-    var hashParams = {};
-    var e, r = /([^&;=]+)=?([^&;]*)/g,
+    let hashParams = {};
+    let e, r = /([^&;=]+)=?([^&;]*)/g,
       q = window.location.hash.substring(1);
     while (e = r.exec(q)) {
       hashParams[e[1]] = decodeURIComponent(e[2]);
