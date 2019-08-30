@@ -5,7 +5,7 @@ from blueprints.leaderAPI import leader_api
 
 app = Flask(__name__)
 CORS(app)
-app.register_blueprint(leader_api)
+app.register_blueprint(leader_api) 
 
 
 if __name__ == '__main__':

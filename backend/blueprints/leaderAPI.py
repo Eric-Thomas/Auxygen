@@ -20,9 +20,9 @@ def add_leader():
             new_leader.save()
             return jsonify({"id": str(new_leader.id), "party_room": new_leader.party_room})
         except Exception as e:
+            print(e)
             tries += 1
             party_room_rand = random.randint(0, 99999)
-
     return jsonify({"Error": "More than 10 tries exceeded"})
 
 
@@ -36,3 +36,6 @@ def get_access_token(id):
     except Exception as E:
         print(E)
         return jsonify({"Error": "Error retrieving access token"})
+
+# @leader_api.route('/leader/fallbackplaylist', methods=['POST'])
+# def create_fallback_playlist()

@@ -3,5 +3,13 @@
 </div>
 
 <div *ngIf="userName" class="queue">
+    <div *ngIf="!fallbackPlaylist">
+        <p>Select Fallback playlist</p>
+        <ul>
+            <li *ngFor="let playlist of playlists; let i = index;">
+                <a (click)="createFallback(i)">{{playlist["name"]}}</a>
+            </li>
+        </ul>
+    </div>
     <app-queue></app-queue>
 </div>
