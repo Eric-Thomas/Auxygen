@@ -2,7 +2,7 @@ var express = require("express"),
     router = express.Router(),
     Constants = require("../constants.js"),
     querystring = require("querystring"),
-    request = require('request'),
+    request = require("request"),
     stateKey = "spotify_auth_state";
 
 
@@ -12,13 +12,13 @@ router.get("/login", function (req, res) {
     var state = generateRandomString(16);
     res.cookie(stateKey, state);
     var scope = getScopes();
-    // Redirect to spotify's authorize
-    res.redirect('https://accounts.spotify.com/authorize?' +
+    // Redirect to spotify"s authorize
+    res.redirect("https://accounts.spotify.com/authorize?" +
         querystring.stringify({
-            response_type: 'code',
+            response_type: "code",
             client_id: Constants.CLIENT_ID,
             scope: scope,
-            redirect_uri: Constants.AUTH_REDIRECT_URI,
+            redirect_uri: Constants.REDIRECT_URI,
             state: state
         }));
 });
@@ -30,7 +30,7 @@ router.get("/callback", function (req, res) {
     // State to protect against attacks such as cross-site request forgery
     var state = req.query.state || null;
     var storedState = req.cookies ? req.cookies[stateKey] : null;
-    // If states don't match for some reason
+    // If states don"t match for some reason
     if (state === null || state !== storedState) {
         // TODO: Set up connect flash to let user know
         res.redirect("/");
@@ -38,14 +38,15 @@ router.get("/callback", function (req, res) {
         // State key no longer needed
         res.clearCookie(stateKey);
         var authOptions = {
-            url: 'https://accounts.spotify.com/api/token',
+            url: "https://accounts.spotify.com/api/token",
             form: {
                 code: code,
-                redirect_uri: Constants.TOKEN_REDIRECT_URI,
-                grant_type: 'authorization_code'
+                redirect_uri: Constants.REDIRECT_URI,
+                grant_type: "authorization_code"
             },
             headers: {
-                'Authorization': 'Basic ' + (new Buffer(Constants.CLIENT_ID + ':' + Constants.CLIENT_SECRET).toString('base64'))
+                // Base 64 encode client ID and Secret
+                "Authorization": "Basic " + (Buffer.from(Constants.CLIENT_ID + ":" + Constants.CLIENT_SECRET).toString("base64"))
             },
             json: true
         };
@@ -56,7 +57,7 @@ router.get("/callback", function (req, res) {
                     access_token: body.access_token,
                     refresh_token: body.refresh_token
                 }
-                res.redirect("/home", { auth: auth });
+                res.redirect("/home");
             } else {
                 res.send(response);
             }
@@ -72,8 +73,8 @@ router.get("/callback", function (req, res) {
  * @return {string} The generated string
  */
 function generateRandomString(length) {
-    var text = '';
-    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     for (var i = 0; i < length; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
