@@ -1,0 +1,19 @@
+{
+  "name": "auxygen",
+  "version": "1.0.0",
+  "description": "Collaborative listening and spotify utilities",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eric-Thomas/Auxygen.git"
+  },
+  "author": "Eric Thomas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Eric-Thomas/Auxygen/issues"
+  },
+  "homepage": "https://github.com/Eric-Thomas/Auxygen#readme"
+}
