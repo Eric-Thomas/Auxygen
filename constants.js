@@ -1,5 +1,6 @@
 module.exports = {
-    client_id: process.env.CLIENT_ID,
-    client_secret: process.env.CLIENT_SECRET,
-    redirect_uri: 'http://localhost:3000/callback'
+    CLIENT_ID: process.env.CLIENT_ID,
+    CLIENT_SECRET: process.env.CLIENT_SECRET,
+    AUTH_REDIRECT_URI: 'http://localhost:3000/spotify_auth/callback',
+    TOKEN_REDIRECT_URI: 'http://localhost:3000/home'
 }

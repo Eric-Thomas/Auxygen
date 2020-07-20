@@ -1,5 +1,6 @@
 var express = require("express"),
-  port = 3000;
+  cookieParser = require("cookie-parser");
+port = 3000;
 
 var app = express();
 
@@ -9,7 +10,8 @@ var spotifyAuthRoutes = require("./routes/spotify_auth");
 
 // App settings config
 app.set("view engine", "ejs");
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public"))
+  .use(cookieParser());
 
 // Route prefixes
 app.use("/", indexRoutes);

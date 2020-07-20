@@ -1,11 +1,12 @@
 var express = require("express"),
     router = express.Router(),
     Constants = require("../constants.js"),
-    querystring = require("querystring");
+    querystring = require("querystring"),
+    request = require('request'),
+    stateKey = "spotify_auth_state";
 
-var stateKey = "spotify_auth_state";
 
-
+// Login route redirects to spotify login
 router.get("/login", function (req, res) {
     // This provides protection against attacks such as cross-site request forgery
     var state = generateRandomString(16);
@@ -15,12 +16,55 @@ router.get("/login", function (req, res) {
     res.redirect('https://accounts.spotify.com/authorize?' +
         querystring.stringify({
             response_type: 'code',
-            client_id: Constants.client_id,
+            client_id: Constants.CLIENT_ID,
             scope: scope,
-            redirect_uri: Constants.redirect_uri,
+            redirect_uri: Constants.AUTH_REDIRECT_URI,
             state: state
         }));
+});
+
+// Callback route
+router.get("/callback", function (req, res) {
+    // Code returned from spotify used to get access token
+    var code = req.query.code || null;
+    // State to protect against attacks such as cross-site request forgery
+    var state = req.query.state || null;
+    var storedState = req.cookies ? req.cookies[stateKey] : null;
+    // If states don't match for some reason
+    if (state === null || state !== storedState) {
+        // TODO: Set up connect flash to let user know
+        res.redirect("/");
+    } else {
+        // State key no longer needed
+        res.clearCookie(stateKey);
+        var authOptions = {
+            url: 'https://accounts.spotify.com/api/token',
+            form: {
+                code: code,
+                redirect_uri: Constants.TOKEN_REDIRECT_URI,
+                grant_type: 'authorization_code'
+            },
+            headers: {
+                'Authorization': 'Basic ' + (new Buffer(Constants.CLIENT_ID + ':' + Constants.CLIENT_SECRET).toString('base64'))
+            },
+            json: true
+        };
+        // Ask for access token and refresh token
+        request.post(authOptions, function (err, response, body) {
+            if (!err && response.statusCode === 200) {
+                var auth = {
+                    access_token: body.access_token,
+                    refresh_token: body.refresh_token
+                }
+                res.redirect("/home", { auth: auth });
+            } else {
+                res.send(response);
+            }
+        })
+    }
 })
+
+
 
 /**
  * Generates a random string containing numbers and letters
