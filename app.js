@@ -3,9 +3,17 @@ var express = require("express"),
 
 var app = express();
 
-app.get("/", function (req, res) {
-  res.send("Home page");
-});
+// Require routes
+var indexRoutes = require("./routes/index");
+
+// App settings config
+app.set("view engine", "ejs");
+
+// Route prefixes
+app.use("/", indexRoutes);
+
+
+
 
 app.listen(port, function () {
   console.log(`Listening on port ${port}`);
