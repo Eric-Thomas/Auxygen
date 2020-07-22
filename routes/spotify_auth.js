@@ -27,6 +27,10 @@ router.get("/login", function (req, res) {
 router.get("/callback", function (req, res) {
     // Code returned from spotify used to get access token
     var code = req.query.code || null;
+    if (!code) {
+        // TODO: Tell user they must allow us access
+        res.redirect("/");
+    }
     // State to protect against attacks such as cross-site request forgery
     var state = req.query.state || null;
     var storedState = req.cookies ? req.cookies[stateKey] : null;
@@ -58,7 +62,7 @@ router.get("/callback", function (req, res) {
                 // Set cookies and don't allow client side read
                 res.cookie("access_token", access_token, { httpOnly: true });
                 res.cookie("refresh_token", refresh_token, { httpOnly: true });
-                res.redirect("/home");
+                res.redirect("/playlists");
             } else {
                 res.send(response);
             }

@@ -1,7 +1,8 @@
 var express = require("express"),
     router = express.Router();
 
-router.get("/playlists", function (req, res) {
+// INDEX - Show all playlist utilities
+router.get("/", function (req, res) {
     res.send("playlists");
 })
 
