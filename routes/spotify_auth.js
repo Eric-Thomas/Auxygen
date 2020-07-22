@@ -53,10 +53,11 @@ router.get("/callback", function (req, res) {
         // Ask for access token and refresh token
         request.post(authOptions, function (err, response, body) {
             if (!err && response.statusCode === 200) {
-                var auth = {
-                    access_token: body.access_token,
-                    refresh_token: body.refresh_token
-                }
+                var access_token = body.access_token;
+                var refresh_token = body.refresh_token;
+                // Set cookies and don't allow client side read
+                res.cookie("access_token", access_token, { httpOnly: true });
+                res.cookie("refresh_token", refresh_token, { httpOnly: true });
                 res.redirect("/home");
             } else {
                 res.send(response);
