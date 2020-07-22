@@ -1,3 +1,5 @@
+const { isSpotifyAuthenticated } = require("../middleware/index.js");
+
 var express = require("express"),
     router = express.Router(),
     Constants = require("../constants.js"),
@@ -25,45 +27,16 @@ router.get("/login", function (req, res) {
 
 // Callback route
 router.get("/callback", function (req, res) {
-    // Code returned from spotify used to get access token
-    var code = req.query.code || null;
-    // State to protect against attacks such as cross-site request forgery
-    var state = req.query.state || null;
-    var storedState = req.cookies ? req.cookies[stateKey] : null;
-    // If states don"t match for some reason
-    if (state === null || state !== storedState) {
-        // TODO: Set up connect flash to let user know
-        res.redirect("/");
-    } else {
+    var code = req.query.code;
+    if (code && statesMatch(req)) {
         // State key no longer needed
         res.clearCookie(stateKey);
-        var authOptions = {
-            url: "https://accounts.spotify.com/api/token",
-            form: {
-                code: code,
-                redirect_uri: Constants.REDIRECT_URI,
-                grant_type: "authorization_code"
-            },
-            headers: {
-                // Base 64 encode client ID and Secret
-                "Authorization": "Basic " + (Buffer.from(Constants.CLIENT_ID + ":" + Constants.CLIENT_SECRET).toString("base64"))
-            },
-            json: true
-        };
-        // Ask for access token and refresh token
-        request.post(authOptions, function (err, response, body) {
-            if (!err && response.statusCode === 200) {
-                var auth = {
-                    access_token: body.access_token,
-                    refresh_token: body.refresh_token
-                }
-                res.redirect("/home");
-            } else {
-                res.send(response);
-            }
-        })
+        getSpotifyToken(code, res);
+    } else {
+        // TODO: Tell user they must allow access
+        res.redirect("/");
     }
-})
+});
 
 
 
@@ -97,6 +70,45 @@ function getScopes() {
     // Read top artists and tracks
     scope += " user-top-read";
     return scope;
+}
+
+function statesMatch(req) {
+    // State to protect against attacks such as cross-site request forgery
+    var state = req.query.state || null;
+    var storedState = req.cookies ? req.cookies[stateKey] : null;
+    // If states don't match or no state is returned
+    return state !== null && state === storedState
+}
+
+function getSpotifyToken(code, res) {
+    var authOptions = {
+        url: "https://accounts.spotify.com/api/token",
+        form: {
+            code: code,
+            redirect_uri: Constants.REDIRECT_URI,
+            grant_type: "authorization_code"
+        },
+        headers: {
+            // Base 64 encode client ID and Secret
+            "Authorization": "Basic " + (Buffer.from(Constants.CLIENT_ID + ":" + Constants.CLIENT_SECRET).toString("base64"))
+        },
+        json: true
+    };
+    // Ask for access token and refresh token
+    request.post(authOptions, function (err, response, body) {
+        if (!err && response.statusCode === 200) {
+            var access_token = body.access_token;
+            var refresh_token = body.refresh_token;
+            // Set cookies and don't allow client side read
+            res.cookie("access_token", access_token, { httpOnly: true });
+            res.cookie("refresh_token", refresh_token, { httpOnly: true });
+            res.redirect("/playlists");
+        } else {
+            console.log(err);
+            // TODO: Tell user something went wrong
+            res.redirect("/");
+        }
+    })
 }
 
 module.exports = router;
