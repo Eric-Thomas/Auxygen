@@ -9,11 +9,15 @@ var app = express();
 var indexRoutes = require("./routes/index");
 var spotifyAuthRoutes = require("./routes/spotify_auth");
 var playlistRoutes = require("./routes/playlists");
+const { populateUserInfo } = require("./middleware");
 
 // App settings config
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"))
   .use(cookieParser());
+
+// Middleware
+app.use(populateUserInfo)
 
 // Route prefixes
 app.use("/", indexRoutes);

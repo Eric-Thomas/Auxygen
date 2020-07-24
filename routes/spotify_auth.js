@@ -13,7 +13,7 @@ router.get("/login", function (req, res) {
     res.cookie(stateKey, state);
     var scope = getScopes();
     // Redirect to spotify"s authorize
-    res.redirect("https://accounts.spotify.com/authorize?" +
+    res.redirect(constants.AUTHORIZE_ENDPOINT +
         querystring.stringify({
             response_type: "code",
             client_id: constants.CLIENT_ID,
@@ -101,7 +101,7 @@ function getSpotifyToken(code) {
     }
 
     // Ask for access token and refresh token
-    var url = "https://accounts.spotify.com/api/token";
+    var url = constants.TOKEN_ENDPOINT;
     return axios.post(url, data, config);
 }
 

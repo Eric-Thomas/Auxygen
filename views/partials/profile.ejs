@@ -1,3 +1,7 @@
 <div class="container">
-    Profile
+    <h1>Welcome <%= spotifyProfile.display_name %> </h1>
+    <% spotifyProfile.images.forEach(function(image) { %>
+    <img src="<%= image.url %> " height="<%= image.height %>" width="<%= image.width %> ">
+    <% }) %>
+
 </div>

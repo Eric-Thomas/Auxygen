@@ -3,6 +3,7 @@ var express = require("express"),
 
 // INDEX - Show all playlist utilities
 router.get("/", function (req, res) {
+    console.log(res.locals)
     res.render("./playlists");
 })
 
