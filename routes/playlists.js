@@ -3,7 +3,7 @@ var express = require("express"),
 
 // INDEX - Show all playlist utilities
 router.get("/", function (req, res) {
-    res.send("playlists");
+    res.render("./playlists");
 })
 
 module.exports = router;

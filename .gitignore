@@ -25,3 +25,9 @@ coverage
 
 # Benchmarking
 benchmarks/graphs
+
+# Test Data
+test.txt
+
+# VS Code
+.vscode

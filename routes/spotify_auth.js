@@ -1,10 +1,8 @@
-const { isSpotifyAuthenticated } = require("../middleware/index.js");
-
 var express = require("express"),
     router = express.Router(),
-    Constants = require("../constants.js"),
+    constants = require("../constants.js"),
     querystring = require("querystring"),
-    request = require("request"),
+    axios = require("axios"),
     stateKey = "spotify_auth_state";
 
 
@@ -18,20 +16,28 @@ router.get("/login", function (req, res) {
     res.redirect("https://accounts.spotify.com/authorize?" +
         querystring.stringify({
             response_type: "code",
-            client_id: Constants.CLIENT_ID,
+            client_id: constants.CLIENT_ID,
             scope: scope,
-            redirect_uri: Constants.REDIRECT_URI,
+            redirect_uri: constants.REDIRECT_URI,
             state: state
         }));
 });
 
 // Callback route
-router.get("/callback", function (req, res) {
+router.get("/callback", async function (req, res) {
     var code = req.query.code;
     if (code && statesMatch(req)) {
         // State key no longer needed
         res.clearCookie(stateKey);
-        getSpotifyToken(code, res);
+        try {
+            var response = await getSpotifyToken(code);
+            res.cookie("access_token", response.data.access_token, { httpOnly: true });
+            res.cookie("refresh_token", response.data.refresh_token, { httpOnly: true });
+            res.redirect("/playlists");
+        } catch (err) {
+            console.log("error")
+            res.send(err)
+        }
     } else {
         // TODO: Tell user they must allow access
         res.redirect("/");
@@ -80,35 +86,23 @@ function statesMatch(req) {
     return state !== null && state === storedState
 }
 
-function getSpotifyToken(code, res) {
-    var authOptions = {
-        url: "https://accounts.spotify.com/api/token",
-        form: {
-            code: code,
-            redirect_uri: Constants.REDIRECT_URI,
-            grant_type: "authorization_code"
-        },
+function getSpotifyToken(code) {
+    var data = querystring.stringify({
+        code: code,
+        redirect_uri: constants.REDIRECT_URI,
+        grant_type: "authorization_code"
+    });
+    var config = {
         headers: {
             // Base 64 encode client ID and Secret
-            "Authorization": "Basic " + (Buffer.from(Constants.CLIENT_ID + ":" + Constants.CLIENT_SECRET).toString("base64"))
-        },
-        json: true
-    };
-    // Ask for access token and refresh token
-    request.post(authOptions, function (err, response, body) {
-        if (!err && response.statusCode === 200) {
-            var access_token = body.access_token;
-            var refresh_token = body.refresh_token;
-            // Set cookies and don't allow client side read
-            res.cookie("access_token", access_token, { httpOnly: true });
-            res.cookie("refresh_token", refresh_token, { httpOnly: true });
-            res.redirect("/playlists");
-        } else {
-            console.log(err);
-            // TODO: Tell user something went wrong
-            res.redirect("/");
+            "Authorization": "Basic " + (Buffer.from(constants.CLIENT_ID + ":" + constants.CLIENT_SECRET).toString("base64")),
+            "Content-type": "application/x-www-form-urlencoded"
         }
-    })
+    }
+
+    // Ask for access token and refresh token
+    var url = "https://accounts.spotify.com/api/token";
+    return axios.post(url, data, config);
 }
 
 module.exports = router;
