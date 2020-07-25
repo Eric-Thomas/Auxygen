@@ -34,6 +34,11 @@ router.get("/top_songs/:time_range", function (req, res) {
         })
 });
 
+// CREATE - Create playlist with users top songs
+router.post("/top_songs/:time_range", function (req, res) {
+    res.send("create playlist for " + req.params.time_range)
+})
+
 function transformTimeRange(timeRange) {
     var transform = {
         short_term: "last month",

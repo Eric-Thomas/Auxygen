@@ -1,6 +1,6 @@
 <%- include("../partials/header") %>
 <h1>Top songs of <%= timeRange %> </h1>
-<form action="POST">
+<form action="<%= timeRange %>" method="POST">
     <button id="create-playlist" class="btn btn-outline-success">Create Playlist</button>
 </form>
 <ul>
