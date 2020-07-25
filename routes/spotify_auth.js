@@ -33,6 +33,8 @@ router.get("/callback", async function (req, res) {
         res.clearCookie(stateKey);
         try {
             var response = await spotifyAPI.requestSpotifyToken(code);
+            // Set access token cookie and API config
+            spotifyAPI.setAccessToken(response.data.access_token);
             res.cookie("access_token", response.data.access_token, { httpOnly: true });
             res.cookie("refresh_token", response.data.refresh_token, { httpOnly: true });
             res.redirect("/playlists");

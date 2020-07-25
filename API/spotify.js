@@ -12,7 +12,7 @@ var spotifyAPI = axios.create({
 })
 
 function setAccessToken(token) {
-    spotifyAPI.defaults.headers.common["Authorization"] = "Bearer " + token;
+    spotifyAPI.defaults.headers["Authorization"] = "Bearer " + token;
 }
 
 /**
@@ -44,6 +44,11 @@ function requestSpotifyToken(code) {
     return spotifyAPI.post(url, data);
 }
 
+function requestUserInfo() {
+    var url = constants.PROFILE_ENDPOINT;
+    return spotifyAPI.get(url)
+}
+
 
 function compareStates(state, storedState) {
     // If states don't match or no state is returned
@@ -69,6 +74,8 @@ module.exports = {
     scopes: getScopes(),
     requestSpotifyToken: requestSpotifyToken,
     compareStates: compareStates,
-    generateRandomString: generateRandomString
+    generateRandomString: generateRandomString,
+    setAccessToken: setAccessToken,
+    requestUserInfo: requestUserInfo
 }
 
