@@ -1,0 +1,14 @@
+<%- include("../partials/header") %>
+<h1>Top songs of <%= timeRange %> </h1>
+<form action="POST">
+    <button id="create-playlist" class="btn btn-outline-success">Create Playlist</button>
+</form>
+<ul>
+    <% songs.forEach(function(song) { %>
+    <li><%= song.name %> - <% for( let i = 0; i < song.artists.length - 1; i++ ) { %>
+        <%= song.artists[i].name + ", " %>
+        <% } %>
+        <%= song.artists[song.artists.length - 1].name %>
+        <% }) %>
+</ul>
+<%- include("../partials/footer") %>

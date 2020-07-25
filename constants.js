@@ -4,5 +4,6 @@ module.exports = {
     REDIRECT_URI: "http://localhost:3000/spotify_auth/callback",
     AUTHORIZE_ENDPOINT: "https://accounts.spotify.com/authorize?",
     TOKEN_ENDPOINT: "https://accounts.spotify.com/api/token",
-    PROFILE_ENDPOINT: "https://api.spotify.com/v1/me"
+    PROFILE_ENDPOINT: "https://api.spotify.com/v1/me",
+    TOP_ENDPOINT: "https://api.spotify.com/v1/me/top/"
 } 

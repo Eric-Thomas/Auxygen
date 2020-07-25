@@ -46,5 +46,5 @@ function hasTokenCookies(req) {
 
 module.exports = {
     isSpotifyAuthenticated: isSpotifyAuthenticated,
-    populateUserInfo: populateUserInfo
+    populateUserInfo: populateUserInfo,
 }
