@@ -1,5 +1,5 @@
 var constants = require("../constants"),
-    axios = require("axios")
+    spotifyAPI = require("../API/spotify")
 
 function isSpotifyAuthenticated(req, res, next) {
     // We have user spotify tokens
@@ -18,17 +18,10 @@ async function populateUserInfo(req, res, next) {
     if (!req.cookies.spotify_profile) {
         // Make user we have api tokens
         if (hasTokenCookies(req)) {
-            var url = constants.PROFILE_ENDPOINT;
-            var config = {
-                headers: {
-                    Authorization: "Bearer " + req.cookies.access_token
-                }
-            }
             try {
-                response = await axios.get(url, config)
+                response = await spotifyAPI.requestUserInfo()
                 res.cookie("spotify_profile", response.data)
                 res.locals.spotifyProfile = response.data
-                console.log("locals saved")
             } catch (err) {
                 console.log(err)
             }

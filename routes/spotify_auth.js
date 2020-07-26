@@ -2,16 +2,16 @@ var express = require("express"),
     router = express.Router(),
     constants = require("../constants.js"),
     querystring = require("querystring"),
-    axios = require("axios"),
+    spotifyAPI = require("../API/spotify"),
     stateKey = "spotify_auth_state";
 
 
 // Login route redirects to spotify login
 router.get("/login", function (req, res) {
     // This provides protection against attacks such as cross-site request forgery
-    var state = generateRandomString(16);
+    var state = spotifyAPI.generateRandomString(16);
     res.cookie(stateKey, state);
-    var scope = getScopes();
+    var scope = spotifyAPI.scopes;
     // Redirect to spotify"s authorize
     res.redirect(constants.AUTHORIZE_ENDPOINT +
         querystring.stringify({
@@ -26,16 +26,20 @@ router.get("/login", function (req, res) {
 // Callback route
 router.get("/callback", async function (req, res) {
     var code = req.query.code;
-    if (code && statesMatch(req)) {
+    var state = req.query.state || null;
+    var storedState = req.cookies ? req.cookies[stateKey] : null
+    if (code && spotifyAPI.compareStates(state, storedState)) {
         // State key no longer needed
         res.clearCookie(stateKey);
         try {
-            var response = await getSpotifyToken(code);
+            var response = await spotifyAPI.requestSpotifyToken(code);
+            // Set access token cookie and API config
+            spotifyAPI.setAccessToken(response.data.access_token);
             res.cookie("access_token", response.data.access_token, { httpOnly: true });
             res.cookie("refresh_token", response.data.refresh_token, { httpOnly: true });
             res.redirect("/playlists");
         } catch (err) {
-            console.log("error")
+            console.log(err)
             res.send(err)
         }
     } else {
@@ -43,66 +47,5 @@ router.get("/callback", async function (req, res) {
         res.redirect("/");
     }
 });
-
-
-
-/**
- * Generates a random string containing numbers and letters
- * @param  {number} length The length of the string
- * @return {string} The generated string
- */
-function generateRandomString(length) {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (var i = 0; i < length; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
-};
-
-/**
- * Getter for scopes needed for Auxygen
- * @return {string} Space seperated list of scopes
- */
-function getScopes() {
-    // Modify playback state for collaborative listening
-    var scope = "user-modify-playback-state";
-    // Read all playlists
-    scope += " playlist-read-collaborative"
-    scope += " playlist-read-private";
-    // Read saved songs
-    scope += " user-library-read";
-    // Read top artists and tracks
-    scope += " user-top-read";
-    return scope;
-}
-
-function statesMatch(req) {
-    // State to protect against attacks such as cross-site request forgery
-    var state = req.query.state || null;
-    var storedState = req.cookies ? req.cookies[stateKey] : null;
-    // If states don't match or no state is returned
-    return state !== null && state === storedState
-}
-
-function getSpotifyToken(code) {
-    var data = querystring.stringify({
-        code: code,
-        redirect_uri: constants.REDIRECT_URI,
-        grant_type: "authorization_code"
-    });
-    var config = {
-        headers: {
-            // Base 64 encode client ID and Secret
-            "Authorization": "Basic " + (Buffer.from(constants.CLIENT_ID + ":" + constants.CLIENT_SECRET).toString("base64")),
-            "Content-type": "application/x-www-form-urlencoded"
-        }
-    }
-
-    // Ask for access token and refresh token
-    var url = constants.TOKEN_ENDPOINT;
-    return axios.post(url, data, config);
-}
 
 module.exports = router;
