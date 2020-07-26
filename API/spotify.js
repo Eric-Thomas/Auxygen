@@ -49,6 +49,14 @@ function requestUserInfo() {
     return spotifyAPI.get(url)
 }
 
+function requestTopSongs(timeRange) {
+    var url = constants.TOP_ENDPOINT + "tracks?" + querystring.stringify({
+        limit: 50,
+        time_range: timeRange
+    });
+    return spotifyAPI.get(url)
+}
+
 
 function compareStates(state, storedState) {
     // If states don't match or no state is returned
@@ -76,6 +84,7 @@ module.exports = {
     compareStates: compareStates,
     generateRandomString: generateRandomString,
     setAccessToken: setAccessToken,
-    requestUserInfo: requestUserInfo
+    requestUserInfo: requestUserInfo,
+    requestTopSongs: requestTopSongs
 }
 

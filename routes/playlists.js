@@ -1,8 +1,8 @@
 var express = require("express"),
     router = express.Router(),
-    axios = require("axios"),
     constants = require("../constants"),
-    querystring = require("querystring")
+    querystring = require("querystring"),
+    spotifyAPI = require("../API/spotify")
 
 // INDEX - Show all playlist utilities
 router.get("/", function (req, res) {
@@ -11,18 +11,7 @@ router.get("/", function (req, res) {
 
 // Get top songs
 router.get("/top_songs/:time_range", function (req, res) {
-    var url = constants.TOP_ENDPOINT + "tracks?" + querystring.stringify({
-        limit: 50,
-        time_range: req.params.time_range
-    });
-
-    var config = {
-        headers: {
-            "Authorization": "Bearer " + req.cookies.access_token,
-            "Content-type": "application/x-www-form-urlencoded"
-        }
-    }
-    axios.get(url, config)
+    spotifyAPI.requestTopSongs(req.params.time_range)
         .then(function (response) {
             // Change from api query to more readable language
             var timeRange = transformTimeRange(req.params.time_range)
